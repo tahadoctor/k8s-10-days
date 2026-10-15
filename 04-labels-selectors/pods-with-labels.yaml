@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-dev
+  labels:
+    app: demo
+    env: dev
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-prod
+  labels:
+    app: demo
+    env: prod
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25

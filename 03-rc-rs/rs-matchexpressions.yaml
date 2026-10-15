@@ -1,0 +1,22 @@
+# ReplicaSet: matchExpressions (In, NotIn, Exists) - RC cannot do this
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: web-rs-expr
+spec:
+  replicas: 2
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - web-expr
+          - web-expr-v2
+  template:
+    metadata:
+      labels:
+        app: web-expr
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.25

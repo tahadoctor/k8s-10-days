@@ -1,0 +1,19 @@
+# Soft rule: prefer disk=ssd, but run anywhere if no node matches
+apiVersion: v1
+kind: Pod
+metadata:
+  name: affinity-preferred
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 80
+          preference:
+            matchExpressions:
+              - key: disk
+                operator: In
+                values:
+                  - ssd
+  containers:
+    - name: nginx
+      image: nginx:1.25

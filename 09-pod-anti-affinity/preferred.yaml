@@ -1,0 +1,27 @@
+# Soft rule: spread replicas when possible, but still schedule them
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anti-preferred
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: anti-preferred
+  template:
+    metadata:
+      labels:
+        app: anti-preferred
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: anti-preferred
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: nginx
+          image: nginx:1.25

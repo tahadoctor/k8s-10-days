@@ -1,0 +1,26 @@
+# Hard rule: no two replicas on the same node.
+# With more replicas than nodes the extra pods stay Pending.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anti-required
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: anti-required
+  template:
+    metadata:
+      labels:
+        app: anti-required
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: anti-required
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: nginx
+          image: nginx:1.25

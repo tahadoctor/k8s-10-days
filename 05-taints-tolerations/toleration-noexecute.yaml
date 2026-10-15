@@ -1,0 +1,16 @@
+# With NoExecute, tolerationSeconds says how long the pod may stay
+# on the node after the taint is added
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-toleration-noexecute
+spec:
+  tolerations:
+    - key: "env"
+      operator: "Equal"
+      value: "prod"
+      effect: "NoExecute"
+      tolerationSeconds: 60
+  containers:
+    - name: nginx
+      image: nginx:1.25

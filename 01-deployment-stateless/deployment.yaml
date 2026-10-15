@@ -1,0 +1,18 @@
+# Stateless app: pods are replaceable, nothing to remember
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-stateless
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-stateless
+  template:
+    metadata:
+      labels:
+        app: web-stateless
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.25

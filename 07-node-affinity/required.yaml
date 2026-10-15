@@ -1,0 +1,19 @@
+# Hard rule: only run on nodes labeled disk=ssd, else stay Pending
+# kubectl label nodes worker1 disk=ssd
+apiVersion: v1
+kind: Pod
+metadata:
+  name: affinity-required
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: disk
+                operator: In
+                values:
+                  - ssd
+  containers:
+    - name: nginx
+      image: nginx:1.25

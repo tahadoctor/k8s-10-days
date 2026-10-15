@@ -1,0 +1,43 @@
+# Run the web pod on the same node as a pod labeled app=cache
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache
+  template:
+    metadata:
+      labels:
+        app: cache
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-with-cache
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-with-cache
+  template:
+    metadata:
+      labels:
+        app: web-with-cache
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: cache
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: nginx
+          image: nginx:1.25
